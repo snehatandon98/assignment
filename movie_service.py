@@ -3,6 +3,8 @@ from boto3 import resource
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import csv
+
+from flask import jsonify
 import config
 
 AWS_ACCESS_KEY_ID = config.AWS_ACCESS_KEY_ID
@@ -109,17 +111,20 @@ def generate_titles_report(director,year_start,year_end):
             FilterExpression=Attr('director').eq(director) & Attr('year').between(year_start,year_end)
             )
         titles=response['Items']
-        #print(titles)
+        result=[]
         for t in titles:
-            print(t['title'])
+            result.append(t['title'])
+        return jsonify(result)
 
 def generate_english_titles(user_review):
     response=MovieTable.scan(
         FilterExpression=Attr('language').eq('English')  & Attr('reviews_from_users').gte(user_review)
     )
     titles=response['Items']
+    result=[]
     for t in titles:
-        print(t['title'])
+        result.append(t['title'])
+    return jsonify(result)
 def generate_highest_budget_titles(country,year):
     response=MovieTable.scan(
         FilterExpression=Attr('country').contains(country) & Attr('year').eq(year)
@@ -132,6 +137,6 @@ def generate_highest_budget_titles(country,year):
         if t['budget']>b:
             title=t['title']
             b=t['budget']
-    print(title)
+    return jsonify(title)
 if __name__ == '__main__':
     main()
