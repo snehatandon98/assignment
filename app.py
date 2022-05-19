@@ -39,6 +39,7 @@ def token_required(f):
 @app.route('/createTable')
 def root_route():
     dynamodb.create_table_movies()
+    dynamodb.populate_table()
     return 'Table created'
 
 def sync():
