@@ -167,4 +167,6 @@ def generate_highest_budget_titles(country,year):
             if t['budget']>b:
                 title=t['title']
                 b=t['budget']
+        if b==0:
+            return jsonify({'message': 'No records found with budget for this request.'})
         return jsonify(title)
