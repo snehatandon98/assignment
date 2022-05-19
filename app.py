@@ -62,12 +62,12 @@ def generate_titles_report(director,year_start,year_end):
 
 
 #Getting list of English Movie titles which have user reviews more than given user review 
-@app.route('/titles/<int:user_review>',methods=['GET'])
+@app.route('/titles/<int:user_review>/<language>',methods=['GET'])
 @token_required
-def generate_english_titles(user_review):
+def generate_lang_titles(language,user_review):
     start = time.time()
     try:
-        response=dynamodb.generate_english_titles(user_review)
+        response=dynamodb.generate_lang_titles(language,user_review)
     except:
         response= jsonify({'message' : 'Invalid request'})
     end=time.time()

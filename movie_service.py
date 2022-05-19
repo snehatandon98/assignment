@@ -126,7 +126,7 @@ def generate_titles_report(director,year_start,year_end):
             )
         titles=response['Items']
         if len(titles) ==0:
-            return jsonify({'message': 'No records found for the request.'})
+            return jsonify({'message': 'No records found for this request.'})
         else:
             result=[]
             for t in titles:
@@ -135,15 +135,15 @@ def generate_titles_report(director,year_start,year_end):
 
 #Getting list of English Movie titles which have user reviews more 
 #than given user review from the database in descending order.
-def generate_english_titles(user_review):
+def generate_lang_titles(language,user_review):
     response=MovieTable.scan(
-        FilterExpression=Attr('language').eq('English')  & Attr('reviews_from_users').gte(user_review)
+        FilterExpression=Attr('language').contains(language)  & Attr('reviews_from_users').gte(user_review)
     )
     titles=response['Items']
     res=[]
     result=[]
     if len(titles)==0:
-        return jsonify({'message': 'No records found for the request.'})
+        return jsonify({'message': 'No records found for this request.'})
     else:
         for t in titles:
             res.append((t['reviews_from_users'],t['title']))
@@ -160,7 +160,7 @@ def generate_highest_budget_titles(country,year):
     titles=response['Items']
     b=0
     if len(titles)==0:
-        return jsonify({'message': 'No records found for the request.'})
+        return jsonify({'message': 'No records found for this request.'})
     else:
         title=''
         for t in titles:
